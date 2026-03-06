@@ -123,6 +123,11 @@ pip install -r requirements.txt
 ```bash
 streamlit run frontend/app.py
 ```
+or
+```bash
+python -m streamlit run frontend/app.py
+```
+
 
 The application will open in your browser at `http://localhost:8501`
 
