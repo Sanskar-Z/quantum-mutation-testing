@@ -20,7 +20,7 @@ class MutationGenerationModule:
     SINGLE_QUBIT_GATES = ['h', 'x', 'y', 'z', 's', 't']
     
     # Two-qubit gates that can replace each other
-    TWO_QUBIT_GATES = ['cx', 'cz', 'ch', 'swap']
+    TWO_QUBIT_GATES = ['cx', 'cz', 'swap']
     
     def __init__(self, seed: int = None):
         """
@@ -89,6 +89,34 @@ class MutationGenerationModule:
         else:
             raise ValueError(f"Unknown mutation operator: {operator}")
     
+    def _create_circuit_with_registers(self, original_circuit: QuantumCircuit) -> QuantumCircuit:
+        """
+        Create a new circuit with the same quantum and classical registers as the original.
+        
+        Args:
+            original_circuit: Circuit to copy registers from
+        
+        Returns:
+            QuantumCircuit: New circuit with preserved registers
+        """
+        qargs = []
+        cargs = []
+        
+        # Add quantum registers
+        for qreg in original_circuit.qregs:
+            qargs.append(qreg)
+        
+        # Add classical registers
+        for creg in original_circuit.cregs:
+            cargs.append(creg)
+        
+        if qargs and cargs:
+            return QuantumCircuit(*qargs, *cargs)
+        elif qargs:
+            return QuantumCircuit(*qargs)
+        else:
+            return QuantumCircuit(original_circuit.num_qubits)
+    
     def _gate_replacement(self, circuit: QuantumCircuit) -> Tuple[QuantumCircuit, dict]:
         """
         Mutation Operator 1: Gate Replacement
@@ -131,7 +159,7 @@ class MutationGenerationModule:
             return None, {}
         
         # Create new circuit with replaced gate
-        mutant_new = QuantumCircuit(mutant.num_qubits)
+        mutant_new = self._create_circuit_with_registers(mutant)
         
         for i, instruction in enumerate(mutant.data):
             if i == pos:
@@ -174,7 +202,7 @@ class MutationGenerationModule:
         removed_gate = removed_instruction.operation
         
         # Create new circuit without the gate
-        mutant_new = QuantumCircuit(mutant.num_qubits)
+        mutant_new = self._create_circuit_with_registers(mutant)
         
         for i, instruction in enumerate(mutant.data):
             if i != pos:
@@ -226,7 +254,7 @@ class MutationGenerationModule:
         new_angle = new_angle % (2 * math.pi)  # Keep in range [0, 2π]
         
         # Create new circuit with modified rotation
-        mutant_new = QuantumCircuit(mutant.num_qubits)
+        mutant_new = self._create_circuit_with_registers(mutant)
         
         for i, instruction in enumerate(mutant.data):
             if i == pos:
@@ -278,11 +306,13 @@ class MutationGenerationModule:
         old_gate = old_instruction.operation
         qubits = old_instruction.qubits
         
-        # Get swapped qubits
-        q1, q2 = qubits[0].index, qubits[1].index
+        # Get swapped qubits - qubits are Qubit objects, use them directly
+        q1, q2 = qubits[0], qubits[1]
+        q1_idx = mutant.qubits.index(q1)
+        q2_idx = mutant.qubits.index(q2)
         
         # Create new circuit with swapped qubits
-        mutant_new = QuantumCircuit(mutant.num_qubits)
+        mutant_new = self._create_circuit_with_registers(mutant)
         
         for i, instruction in enumerate(mutant.data):
             if i == pos:
@@ -298,8 +328,8 @@ class MutationGenerationModule:
             'operator': 'qubit_swap',
             'position': pos,
             'gate': old_gate.name,
-            'old_qubits': [q1, q2],
-            'new_qubits': [q2, q1],
+            'old_qubits': [q1_idx, q2_idx],
+            'new_qubits': [q2_idx, q1_idx],
             'mutation_id': self.mutation_count
         }
     
@@ -325,7 +355,7 @@ class MutationGenerationModule:
         duplicated_gate = duplicated_instruction.operation
         
         # Create new circuit with duplicated gate
-        mutant_new = QuantumCircuit(mutant.num_qubits)
+        mutant_new = self._create_circuit_with_registers(mutant)
         
         for i, instruction in enumerate(mutant.data):
             mutant_new.append(instruction)

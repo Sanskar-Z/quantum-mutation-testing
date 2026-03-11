@@ -425,7 +425,7 @@ elif page == "View Results":
         st.metric("Survived Mutants", results['survived_mutants'])
     with col4:
         score_color = "🟢" if results['mutation_score'] >= 80 else "🟡" if results['mutation_score'] >= 60 else "🔴"
-        st.metric("Mutation Score", f"{result['mutation_score']:.2f}%", f" {score_color}")
+        st.metric("Mutation Score", f"{results['mutation_score']:.2f}%", f" {score_color}")
     
     st.divider()
     

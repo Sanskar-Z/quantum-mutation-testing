@@ -19,7 +19,7 @@ class CircuitValidationModule:
     }
     
     VALID_TWO_QUBIT_GATES = {
-        'cx', 'cnot', 'cz', 'cy', 'ch', 'csx', 'swap',
+        'cx', 'cnot', 'cz', 'cy', 'csx', 'swap',
         'iswap', 'ecr', 'rxx', 'ryy', 'rzz'
     }
     

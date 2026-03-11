@@ -110,9 +110,9 @@ class QiskitCircuitInterpreter:
         elif gate_name == 'swap':
             if len(qubits) >= 2:
                 circuit.swap(qubits[0], qubits[1])
-        elif gate_name == 'ch':
+        elif gate_name == 'cy':
             if len(qubits) >= 2:
-                circuit.ch(qubits[0], qubits[1])
+                circuit.cy(qubits[0], qubits[1])
     
     @staticmethod
     def to_qasm_string(circuit: QuantumCircuit) -> str:
@@ -142,7 +142,7 @@ class QiskitCircuitInterpreter:
             'num_qubits': circuit.num_qubits,
             'num_gates': circuit.size(),
             'depth': circuit.depth(),
-            'operations': list(circuit.count_ops().elements()),
+            'operations': list(circuit.count_ops().items()),
             'width': len(circuit.qregs) + len(circuit.cregs)
         }
     

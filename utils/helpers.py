@@ -89,6 +89,177 @@ cz q[0],q[1];
 rx(0.785) q[0];
 rx(0.785) q[1];
 measure q -> c;"""
+    
+    @staticmethod
+    def get_single_qubit() -> str:
+        """Get simple single-qubit circuit."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[1];
+creg c[1];
+h q[0];
+measure q[0] -> c[0];"""
+    
+    @staticmethod
+    def get_hadamard_chain() -> str:
+        """Get Hadamard chain circuit (4 qubits)."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[4];
+creg c[4];
+h q[0];
+h q[1];
+h q[2];
+h q[3];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_pauli_gates() -> str:
+        """Get circuit using all Pauli gates."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+x q[0];
+y q[1];
+z q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_phase_gates() -> str:
+        """Get circuit with phase and S/T gates."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+creg c[2];
+h q[0];
+s q[0];
+h q[1];
+t q[1];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_rotation_gates() -> str:
+        """Get circuit with RX, RY, RZ rotation gates."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+rx(1.57) q[0];
+ry(0.785) q[1];
+rz(3.14159) q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_w_state() -> str:
+        """Get W state circuit (3-qubit)."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+h q[0];
+cx q[0],q[1];
+x q[0];
+h q[0];
+cx q[0],q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_swap_circuit() -> str:
+        """Get SWAP gate circuit."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+creg c[2];
+x q[0];
+swap q[0],q[1];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_toffoli_circuit() -> str:
+        """Get Toffoli (CCNOT) gate circuit."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+x q[0];
+x q[1];
+ccx q[0],q[1],q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_deep_circuit() -> str:
+        """Get deep circuit with multiple layers."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+creg c[2];
+h q[0];
+h q[1];
+cx q[0],q[1];
+h q[0];
+h q[1];
+cx q[0],q[1];
+h q[0];
+h q[1];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_quantum_adder() -> str:
+        """Get simple quantum adder circuit."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+x q[0];
+x q[1];
+cx q[0],q[2];
+cx q[1],q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_superposition_3qubit() -> str:
+        """Get 3-qubit equal superposition."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+h q[0];
+h q[1];
+h q[2];
+cx q[0],q[1];
+cx q[1],q[2];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_vqe_ansatz() -> str:
+        """Get variational quantum eigensolver ansatz."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+creg c[2];
+rx(0.5) q[0];
+rx(0.5) q[1];
+cx q[0],q[1];
+rz(0.3) q[0];
+rz(0.3) q[1];
+measure q -> c;"""
+    
+    @staticmethod
+    def get_complex_entanglement() -> str:
+        """Get complex multi-gate entanglement circuit."""
+        return """OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[4];
+creg c[4];
+h q[0];
+h q[1];
+h q[2];
+h q[3];
+cx q[0],q[1];
+cx q[2],q[3];
+cx q[1],q[2];
+measure q -> c;"""
 
 
 class FileUtils:
